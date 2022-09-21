@@ -1,0 +1,76 @@
+﻿@page "/"
+
+@inject ITareasServicio _tareasServicio
+
+<PageTitle>Tareas Pendientes</PageTitle>
+
+<h3>Tareas Pendientes</h3>
+
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Completado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var E in Tareas)
+        {
+            <tr>
+                <td scope="row">@E.Id</td>
+                <td>@E.Nombre</td>
+                <td>@(E.Completada?"Si":"No")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+
+<div class="mb-3">
+    <label class="form-label">Nombre</label>
+    <input type="text" class="form-control" @bind-value="tarea.Nombre" />
+</div>
+
+
+
+<div class="mb-3 form-check">
+
+    @if (tarea.Completada)
+    {
+        <input type="checkbox" class="form-check-input" @bind-value="tarea.Completada" checked />
+    }
+    else
+    {
+        <input type="checkbox" class="form-check-input" @bind-value="tarea.Completada" />
+    }
+    <label class="form-label"> Completada</label>
+</div>
+
+
+<div class="mb-3 text-center">
+    <button class="btn btn-primary" @onclick="Agregar">Agregar</button>
+</div>
+
+@code{
+    private Tarea tarea { get; set; } = new Tarea();
+    private List<Tarea> Tareas { get; set; } = new List<Tarea>();
+
+
+    protected override void OnInitialized()
+    {
+        Tareas = _tareasServicio.Listar();
+    }
+
+    private void Agregar()
+    {
+        _tareasServicio.Agregar(tarea);
+        tarea = new Tarea();
+        Tareas = _tareasServicio.Listar();
+    }
+
+
+}

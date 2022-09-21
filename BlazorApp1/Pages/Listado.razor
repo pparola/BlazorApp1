@@ -1,0 +1,26 @@
+﻿@page "/listado"
+@inject ITareasServicio _tareasServicio
+
+<h3>Listado de Tareas</h3>
+
+<ul class="list-group">
+
+    @foreach(var E in tareas)
+    {
+        <li class="list-group-item">@E.Nombre</li>
+    }
+
+</ul>
+
+
+
+@code {
+
+    private List<Tarea> tareas;
+
+    protected override void OnInitialized()
+    {
+        tareas = _tareasServicio.Listar();
+    }
+
+}
